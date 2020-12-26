@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chessboard</title>
+  <style>
+    table {
+      margin: auto;
+      border-collapse: collapse;
+    }
+    td {
+      border: 1px solid #888888;
+      width: 30px;
+      height: 30px;
+      background-color: #EEEEEE;
+      text-align: center;
+      font-size: 1.5em;
+    }
+  </style>
+</head>
+<body>
+<script>
+// Создать функцию, генерирующую шахматную доску. При этом можно использовать любые html-теги по своему желанию.
+// Доска должна быть разлинована соответствующим образом, т.е. чередовать черные и белые ячейки.
+// Строки должны нумероваться числами от 1 до 8, столбцы – латинскими буквами A, B, C, D, E, F, G, H.
+'use strict';
+
+const settings = {
+  rowsCount: 10,
+  columnsCount: 10,
+  blackCellColor: '#888888',
+}
+
+const chessboard = {
+  settings,
+  containerElement: null,
+
+  init() {
+    if (this.containerElement === null) {
+      const board = document.createElement('table');
+      board.id = 'chessboard';
+      document.querySelector('body').prepend(board);
+    }
+
+    this.containerElement = document.getElementById('chessboard');
+    this.containerElement.innerHTML = '';
+    this.initCells();
+
+    console.log(this.containerElement);
+  },
+
+  initCells() {
+    const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+    for (let i = 0; i < this.settings.rowsCount; i++) {
+      const row = document.createElement('tr');
+      this.containerElement.append(row);
+      for (let j = 0; j < this.settings.columnsCount; j++) {
+        const cell = document.createElement('td');
+        row.append(cell);
+
+        if ((i === 0 || i === this.settings.rowsCount - 1) && j > 0 && j < this.settings.columnsCount - 1) {
+          cell.textContent = letters[j - 1];
+        }
+        if ((j === 0 || j === this.settings.columnsCount - 1) && i > 0 && i < this.settings.rowsCount - 1) {
+          cell.textContent = (8 - i + 1).toString();
+        }
+        if (i > 0 && i < this.settings.rowsCount - 1 && j > 0 && j < this.settings.columnsCount - 1 &&
+                ((i % 2 === 1 && j % 2 === 0) || (i % 2 === 0 && j % 2 === 1))) {
+          cell.style.backgroundColor = this.settings.blackCellColor;
+        }
+      }
+    }
+  },
+}
+
+chessboard.init();
+
+</script>
+</body>
+</html>
