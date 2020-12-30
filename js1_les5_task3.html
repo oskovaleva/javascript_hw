@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Shopping basket</title>
+</head>
+<body>
+  <div id='basket'></div>
+  <script>
+    // Сделать генерацию корзины динамической: верстка корзины не должна находиться в HTML-структуре.
+    // Там должен быть только div, в который будет вставляться корзина, сгенерированная на базе JS:
+    // 1. Пустая корзина должна выводить строку «Корзина пуста»;
+    // 2. Наполненная должна выводить «В корзине: n товаров на сумму m рублей».
+    'use strict';
+
+    const basket = {
+        goods: [
+            {
+                name: 'Good 1',
+                price: 1000,
+                quantity: 3,
+            },
+            {
+                name: 'Good 2',
+                price: 2000,
+                quantity: 2,
+            },
+            {
+                name: 'Good 3',
+                price: 3000,
+                quantity: 1,
+            },
+        ],
+
+        countBasketPrice() {
+            let total = 0;
+            for (let i = 0; i < this.goods.length; i++) {
+                total += this.goods[i].price * this.goods[i].quantity;
+            }
+            return total;
+        }
+    }
+
+    const divBasket = document.getElementById('basket');
+    if (basket.goods.length === 0) {
+        divBasket.textContent = 'Basket is empty';
+    } else {
+        divBasket.textContent = `Basket contains ${basket.goods.length} goods, total ${basket.countBasketPrice()} RUB`;
+    }
+
+  </script>
+</body>
+</html>
