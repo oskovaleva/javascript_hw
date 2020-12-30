@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Shopping basket</title>
+</head>
+<body>
+<div id="container">
+    <div>
+        <img src="img/pencil.jpg" alt="pencil">
+        Price 10 RUB
+        <button class="button-buy" data-price="10" data-name="pencil">Buy</button>
+    </div>
+    <div>
+        <img src="img/mouse.jpg" alt="mouse">
+        Price 1000 RUB
+        <button class="button-buy" data-price="1000" data-name="mouse">Buy</button>
+    </div>
+    <div>
+        <img src="img/keyboard.jpg" alt="keyboard">
+        Price 1500 RUB
+        <button class="button-buy" data-price="1500" data-name="keyboard">Buy</button>
+    </div>
+</div>
+<div id="basket">
+    Number of goods: <span id="basket_amount">0</span>
+    Total: <span id="basket_total">0</span>
+</div>
+<script>
+// Доработать модуль корзины.
+// a. Добавлять в объект корзины выбранные товары по клику на кнопке «Купить» без перезагрузки страницы
+// b. Привязать к событию покупки товара пересчет корзины и обновление ее внешнего вида
+'use strict';
+
+const catalogSettings = {
+    catalogSelector: '#container',
+    buttonClass: 'button-buy',
+}
+
+const basket = {
+    settings: {
+        countSelector: '#basket_amount',
+        totalSelector: '#basket_total',
+    },
+
+    goods: [],
+    goods_amount: null,
+    total: null,
+
+    init(settings = {}) {
+        Object.assign(this.settings, settings);
+        this.goods_amount = 0;
+        this.total = 0;
+
+        document
+            .querySelector(catalogSettings.catalogSelector)
+            .addEventListener('click', event => this.containerClickHandler(event));
+
+        this.render();
+    },
+
+    render() {
+        document.querySelector(this.settings.countSelector).textContent = this.goods_amount;
+        document.querySelector(this.settings.totalSelector).textContent = this.total;
+    },
+
+    countBasketPrice() {
+        let total = 0;
+        for (let i = 0; i < this.goods.length; i++) {
+            total += this.goods[i].price * this.goods[i].quantity;
+        }
+        return total;
+    },
+
+    add(goodName, goodPrice) {
+        for (let i = 0; i < this.goods.length; i++) {
+            if (goodName === this.goods[i].name) {
+                this.goods[i].quantity++;
+                return;
+            }
+        }
+
+        this.goods.push({
+            name: goodName,
+            price: goodPrice,
+            quantity: 1,
+        })
+    },
+
+    containerClickHandler(event) {
+        if (event.target.classList.value === catalogSettings.buttonClass) {
+            this.add(event.target.dataset.name, +event.target.dataset.price);
+            this.goods_amount++;
+            this.total = this.countBasketPrice();
+            this.render();
+        }
+    },
+};
+
+basket.init();
+
+</script>
+</body>
+</html>
